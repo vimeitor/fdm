@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -54,6 +55,11 @@ public class Main extends Application {
                 rectangle.setFill(Color.BURLYWOOD);
             rectangles_pane.getChildren().add(rectangle);
         }
+        rectangles_pane.setAlignment(Pos.CENTER);
+
+        // We force JavaFX to prerender the rectangles so that we know the exact position they
+        // will occupy; otherwise, the first time we run drawLines() it will superpose all
+        // rectangles and assume all X = 0
         rectangles_pane.applyCss();
         rectangles_pane.layout();
 
@@ -69,29 +75,27 @@ public class Main extends Application {
 
         Double[] espacio = {1.0, 1.0, 1.0, 1.0, 1.0, 1.55, 1.55, 1.55, 1.55, 1.55};
         int n = 10;
-        ArrayList<Double[]> res = Algorithm.snell(espacio, 0.05, 50);
+        ArrayList<Double[]> res = Algorithm.snell(espacio, 0.20, 50);
         drawLines(coordinate_index, res);
 
-        prev.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
-                coordinate_index = max(0, coordinate_index - 1);
-                drawLines(coordinate_index,res);
-            }
+        prev.setOnAction(actionEvent -> {
+            main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
+            coordinate_index = max(0, coordinate_index - 1);
+            drawLines(coordinate_index, res);
         });
-        next.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-                main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
-                coordinate_index = min(res.size() - 1, coordinate_index + 1);
-                drawLines(coordinate_index,res);
-            }
+        next.setOnAction(actionEvent -> {
+            main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
+            coordinate_index = min(res.size() - 1, coordinate_index + 1);
+            drawLines(coordinate_index, res);
         });
 
         Scene scene = new Scene(main_pane, 300, 250);
         primaryStage.setTitle("Fiber optic simulation");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        // The initial render is incorrect. Let's simulate a button press; it doesn't affect the
+        // result
+        prev.fire();
     }
 }

@@ -31,7 +31,7 @@ public class Algorithm {
         Double time = calculate_light_time(space, coords);
         int current_tries = 0;
         while (true) {
-            int region = ThreadLocalRandom.current().nextInt(1, num_regions - 1);
+            int region = ThreadLocalRandom.current().nextInt(1, num_regions);
             Double alt = ThreadLocalRandom.current().nextDouble(-delta, delta);
 
             Double[] new_coords = coords.clone();
