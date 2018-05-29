@@ -1,13 +1,12 @@
 package sample;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -59,43 +58,40 @@ public class Main extends Application {
 
         // We force JavaFX to prerender the rectangles so that we know the exact position they
         // will occupy; otherwise, the first time we run drawLines() it will superpose all
-        // rectangles and assume all X = 0
+        // rectangles and assume all x = 0
         rectangles_pane.applyCss();
         rectangles_pane.layout();
 
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-        HBox buttons_pane = new HBox();
-        Button prev = new Button("<");
-        Button next = new Button(">");
-        buttons_pane.getChildren().add(prev);
-        buttons_pane.getChildren().add(next);
-        main_pane.getChildren().add(buttons_pane);
-
         Double[] espacio = {1.0, 1.0, 1.0, 1.0, 1.0, 1.55, 1.55, 1.55, 1.55, 1.55};
-        int n = 10;
         ArrayList<Double[]> res = Algorithm.snell(espacio, 0.20, 50);
-        drawLines(coordinate_index, res);
 
-        prev.setOnAction(actionEvent -> {
+        Slider slider = new Slider();
+        slider.setMin(0);
+        slider.setMax(res.size() - 1);
+        slider.setValue(0);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(1);
+        slider.setMinorTickCount(1);
+        slider.setBlockIncrement(1);
+        slider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
-            coordinate_index = max(0, coordinate_index - 1);
-            drawLines(coordinate_index, res);
+            drawLines(newValue.intValue(), res);
         });
-        next.setOnAction(actionEvent -> {
-            main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
-            coordinate_index = min(res.size() - 1, coordinate_index + 1);
-            drawLines(coordinate_index, res);
-        });
+        main_pane.getChildren().add(slider);
+
+        drawLines(coordinate_index, res);
 
         Scene scene = new Scene(main_pane, 300, 250);
         primaryStage.setTitle("Fiber optic simulation");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // The initial render is incorrect. Let's simulate a button press; it doesn't affect the
-        // result
-        prev.fire();
+        // The initial render is incorrect. Let's rerender it again.
+        main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
+        drawLines(coordinate_index, res);
     }
 }
