@@ -5,7 +5,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -15,9 +14,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
-
-import static java.lang.Math.max;
-import static java.lang.Math.min;
 
 public class Main extends Application {
     private Pane main_pane;
@@ -77,6 +73,7 @@ public class Main extends Application {
         slider.setMajorTickUnit(1);
         slider.setMinorTickCount(1);
         slider.setBlockIncrement(1);
+        slider.setMinWidth(width * 10);
         slider.valueProperty().addListener((observableValue, oldValue, newValue) -> {
             main_pane.getChildren().subList(4, main_pane.getChildren().size()).clear();
             drawLines(newValue.intValue(), res);
