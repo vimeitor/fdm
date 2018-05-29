@@ -1,5 +1,7 @@
 package sample;
 
+import java.util.ArrayList;
+import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Algorithm {
@@ -7,47 +9,59 @@ public class Algorithm {
     }
 
     /**
-     * @param space Refraction index list
-     * @param d TODO
+     * @param space     Refraction indices list
+     * @param delta     Variability of the new y(i) coordinate with respect to the old y(i)
+     *                  The higher the value, the faster the convergence speed
+     * @param max_tries The amount of times a new random y(i) will be generated for a given y(i)
+     *                  The higher the value, the faster the convergence, but the lower the
+     *                  performance
      * @return List of updated y(i) coordinates
      */
-    Double[] snell(Double[] space, double d) {
+    static ArrayList<Double[]> snell(Double[] space, double delta, int max_tries) {
         int num_regions = space.length;
-        Double[] y_coords = new Double[num_regions + 1];
+
+        Double[] coords = new Double[num_regions + 1];
         for (int i = 0; i <= num_regions; i++) {
-            y_coords[i] = ThreadLocalRandom.current().nextDouble(0.0, 1.0);
+            coords[i] = ThreadLocalRandom.current().nextDouble(0.0, 1.0);
         }
-        Double time = calculate_light_time(space, y_coords);
-        int cont = 0;
+
+        ArrayList<Double[]> total_coords = new ArrayList<>();
+        total_coords.add(coords);
+
+        Double time = calculate_light_time(space, coords);
+        int current_tries = 0;
         while (true) {
             int region = ThreadLocalRandom.current().nextInt(1, num_regions - 1);
-            Double alt = ThreadLocalRandom.current().nextDouble(-d, d);
-            Double[] new_y_coords = y_coords.clone();
-            new_y_coords[region] = y_coords[region] + alt;
-            Double new_time = calculate_light_time(space, new_y_coords);
+            Double alt = ThreadLocalRandom.current().nextDouble(-delta, delta);
+
+            Double[] new_coords = coords.clone();
+            new_coords[region] = coords[region] + alt;
+
+            Double new_time = calculate_light_time(space, new_coords);
             if (new_time < time) {
                 time = new_time;
-                y_coords = new_y_coords;
-                cont = 0;
+                coords = new_coords;
+                current_tries = 0;
+                total_coords.add(new_coords);
             } else {
-                cont++;
-                if (cont == 50) {
+                current_tries++;
+                if (current_tries == max_tries) {
                     break;
                 }
             }
         }
-        return y_coords;
+        return total_coords;
     }
 
     /**
-     * @param space    Refraction index list
+     * @param space    Refraction indices list
      * @param y_coords y(i) coordinates list
      * @return Time it takes for light to go through the given space
      */
-    private Double calculate_light_time(Double[] space, Double[] y_coords) {
+    static private Double calculate_light_time(Double[] space, Double[] y_coords) {
         Double time = 0.0;
-        Tuple<Double, Double> end = new Tuple<>(0.0, 0.0);
         Tuple<Double, Double> start = new Tuple<>(0.0, 0.0);
+        Tuple<Double, Double> end = new Tuple<>(0.0, 0.0);
         for (int i = 0; i < space.length; i++) {
             end.first = i + 1.0;
             end.second = y_coords[i + 1];
