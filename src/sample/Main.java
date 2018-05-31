@@ -44,7 +44,7 @@ public class Main extends Application {
         rectangles_pane = new HBox();
         for (int i = 0; i < 10; i++) {
             Rectangle rectangle = new Rectangle(width, height);
-            if (i % 2 == 0)
+            if (i < 5)
                 rectangle.setFill(Color.BISQUE);
             else
                 rectangle.setFill(Color.BURLYWOOD);
