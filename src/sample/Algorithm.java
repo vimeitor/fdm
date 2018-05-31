@@ -15,7 +15,7 @@ public class Algorithm {
      * @param max_tries The amount of times a new random y(i) will be generated for a given y(i)
      *                  The higher the value, the faster the convergence, but the lower the
      *                  performance
-     * @return List of updated y(i) coordinates
+     * @return List of lists of all coordinates that the light will go through
      */
     static ArrayList<Double[]> snell(Double[] space, double delta, int max_tries) {
         int num_regions = space.length;
