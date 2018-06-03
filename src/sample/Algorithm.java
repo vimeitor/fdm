@@ -1,7 +1,6 @@
 package sample;
 
 import java.util.ArrayList;
-import java.util.Vector;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Algorithm {
@@ -51,6 +50,26 @@ public class Algorithm {
             }
         }
         return total_coords;
+    }
+
+    static private Double snell(int num_regions, double initial_angle, double n1, double n2,
+                                double a, double alpha, int radius) {
+        double delta = (n1 - n2) / n1;
+
+        // Populate the indices from each layer assuming it's a GRIN fiber optic
+        Double[] indices = new Double[num_regions + 1];
+        indices[0] = n1;
+        indices[1] = n2;
+        for (int i = 2; i < indices.length; i++) {
+            indices[i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow(i / radius, alpha));
+        }
+
+        Double[] coords = new Double[num_regions + 1];
+        for (int i = 1; i < num_regions; i++) {
+            // TODO find next position from previous position and region height
+            // difference
+            // double angle = Math.atan(coords[i - 1] / )
+        }
     }
 
     /**
