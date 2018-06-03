@@ -2,6 +2,7 @@ package sample;
 
 import javafx.application.Application;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -42,6 +43,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         rectangles_pane = new HBox();
+        rectangles_pane.setPadding(new Insets(80, 20, 20, 80));
         for (int i = 0; i < 10; i++) {
             Rectangle rectangle = new Rectangle(width, height);
             if (i < 5)
@@ -62,7 +64,7 @@ public class Main extends Application {
         main_pane.getChildren().add(rectangles_pane);
 
         Double[] espacio = {1.0, 1.0, 1.0, 1.0, 1.0, 1.55, 1.55, 1.55, 1.55, 1.55};
-        ArrayList<Double[]> res = Algorithm.snell(espacio, 0.20, 50);
+        ArrayList<Double[]> res = Algorithm.fermat(espacio, 0.20, 50);
 
         Slider slider = new Slider();
         slider.setMin(0);

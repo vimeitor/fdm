@@ -17,7 +17,7 @@ public class Algorithm {
      *                  performance
      * @return List of lists of all coordinates that the light will go through
      */
-    static ArrayList<Double[]> snell(Double[] space, double delta, int max_tries) {
+    static ArrayList<Double[]> fermat(Double[] space, double delta, int max_tries) {
         int num_regions = space.length;
 
         Double[] coords = new Double[num_regions + 1];
