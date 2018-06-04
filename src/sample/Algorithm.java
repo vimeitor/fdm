@@ -52,8 +52,8 @@ public class Algorithm {
         return total_coords;
     }
 
-    static private Double snell(int num_regions, double initial_angle, double n1, double n2,
-                                double a, double alpha, int radius) {
+    static private Double[] snell(int num_regions, double initial_angle, double n1, double n2,
+                                  double alpha, int radius) {
         double delta = (n1 - n2) / n1;
 
         // Populate the indices from each layer assuming it's a GRIN fiber optic
@@ -66,10 +66,13 @@ public class Algorithm {
 
         Double[] coords = new Double[num_regions + 1];
         for (int i = 1; i < num_regions; i++) {
-            // TODO find next position from previous position and region height
-            // difference
-            // double angle = Math.atan(coords[i - 1] / )
+            double region_height = radius / num_regions;
+            double in_angle = Math.atan(region_height / (coords[i - 1] / coords[i - 2]));
+            double out_angle = Math.asin(indices[i - 1] * Math.sin(in_angle) / indices[i]);
+            double x = region_height / Math.tan(out_angle);
+            coords[i] = coords[i - 1] + x;
         }
+        return coords;
     }
 
     /**
