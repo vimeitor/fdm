@@ -52,7 +52,7 @@ public class Algorithm {
         return total_coords;
     }
 
-    static private Double[] snell(int num_regions, double initial_angle, double n1, double n2,
+    static Double[] snell(int num_regions, double initial_angle, double n1, double n2,
                                   double alpha, int radius) {
         double delta = (n1 - n2) / n1;
 
@@ -65,6 +65,7 @@ public class Algorithm {
         }
 
         Double[] coords = new Double[num_regions + 1];
+        coords[0] = initial_angle; // FIXME: Temporarily using it as initial x position
         for (int i = 1; i < num_regions; i++) {
             double region_height = radius / num_regions;
             double in_angle = Math.atan(region_height / (coords[i - 1] / coords[i - 2]));
