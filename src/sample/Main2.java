@@ -12,6 +12,8 @@ import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 public class Main2 extends Application {
     private Pane main_pane;
     private VBox rectangles_pane;
@@ -41,13 +43,19 @@ public class Main2 extends Application {
     public void start(Stage primaryStage) {
         rectangles_pane = new VBox();
         rectangles_pane.setPadding(new Insets(80, 20, 20, 80));
-        for (int i = 0; i < 40; i++) {
+        for (int i = 0; i < 7; i++) {
             Rectangle rectangle = new Rectangle(width, height);
             if (i % 2 == 0)
                 rectangle.setFill(Color.BISQUE);
             else
                 rectangle.setFill(Color.BURLYWOOD);
             rectangles_pane.getChildren().add(rectangle);
+        }
+        ArrayList<Tuple<Double, Double>> a = Algorithm.snell(7,82,1.47,0.01,1);
+
+        for(int i = 0; i < a.size();++i) {
+            System.out.print("x: "+a.get(i).first);
+            System.out.println(". y: "+a.get(i).second);
         }
 
         // We force JavaFX to prerender the rectangles so that we know the exact position they
