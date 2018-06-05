@@ -52,26 +52,76 @@ public class Algorithm {
         return total_coords;
     }
 
-    static Double[] snell(int num_regions, double initial_angle, double n1, double n2,
-                                  double alpha, int radius) {
-        double delta = (n1 - n2) / n1;
+    static ArrayList<Tuple<Double, Double>> snell(int num_regions, double initial_angle, double
+            n1, double delta, double alpha, int radius) {
+        double n2 = Math.sqrt(n1 - delta * n1);
 
-        // Populate the indices from each layer assuming it's a GRIN fiber optic
-        Double[] indices = new Double[num_regions + 1];
-        indices[0] = n1;
-        indices[1] = n2;
-        for (int i = 2; i < indices.length; i++) {
-            indices[i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow(i / radius, alpha));
+        Double[] indices = new Double[num_regions];
+        indices[0] = n2;
+        indices[num_regions - 1] = n2;
+
+        int core_index = (num_regions - 1) / 2;
+        indices[core_index] = n1;
+        for (int i = 1; i < core_index; i++) {
+            indices[core_index + i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow(i / radius, alpha));
+            indices[core_index - i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow(i / radius, alpha));
         }
 
-        Double[] coords = new Double[num_regions + 1];
-        coords[0] = initial_angle; // FIXME: Temporarily using it as initial x position
-        for (int i = 1; i < num_regions; i++) {
-            double region_height = radius / num_regions;
-            double in_angle = Math.atan(region_height / (coords[i - 1] / coords[i - 2]));
-            double out_angle = Math.asin(indices[i - 1] * Math.sin(in_angle) / indices[i]);
-            double x = region_height / Math.tan(out_angle);
-            coords[i] = coords[i - 1] + x;
+        ArrayList<Tuple<Double, Double>> coords = new ArrayList<>();
+        Tuple<Double, Double> current = new Tuple();
+
+        current.second = (double) num_regions / 2.0;
+        coords[0] = current;
+        double angle = initial_angle;
+        boolean reflects = true;
+        boolean upwards = true;
+        int current_region = core_index;
+        int next_region = core_index + 1;
+        double current_angle = angle.toradians();
+        double next_angle;
+        int i = 0;
+        coords[i] = current;
+        double critical_angle;
+        double new_x = 0.0;
+        while (actual.first < 100) {
+            // Check if beam is inside fiber optic
+            if (next_region > num_regions - 1 || next_region < 0) {
+                break;
+            }
+
+            // actual = calculate_new_coords(current,direction,indices[currentregion],
+            // indices[next_region],angle); // TODO: calcular nuevas coordenadas
+
+            critical_angle = Math.asin(indices[next_region] / indices[current_region]);
+            if (current_angle > critical_angle) {
+                reflects = true;
+                upwards = !upwards;
+                if (upwards) {
+                    next_region = next_region + 2;
+                    current.second = current.second + 1;
+                } else {
+                    next_region = next_region - 2;
+                    current.second = current.second - 1;
+                }
+            } else {
+                reflects = false;
+                current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin
+                        (current_angle));
+                if (upwards) {
+                    current_region = current_region + 1;
+                    next_region = next_region + 1;
+                    current.second = current.second + 1;
+                } else {
+                    current_region = current_region - 1;
+                    next_region = next_region - 1;
+                    current.second = current.second - 1;
+                }
+            }
+            new_x = 1.0 / Math.tan(current_angle);
+            current.first = current.first + new_x;
+
+            coords.set(i, current);
+            i++;
         }
         return coords;
     }
