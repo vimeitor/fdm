@@ -41,7 +41,7 @@ public class Main2 extends Application {
     public void start(Stage primaryStage) {
         rectangles_pane = new VBox();
         rectangles_pane.setPadding(new Insets(80, 20, 20, 80));
-        for (int i = 0; i < 35; i++) {
+        for (int i = 0; i < 40; i++) {
             Rectangle rectangle = new Rectangle(width, height);
             if (i % 2 == 0)
                 rectangle.setFill(Color.BISQUE);
