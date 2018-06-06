@@ -1,4 +1,4 @@
-package sample;
+package src;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -89,10 +89,21 @@ public class Algorithm {
         current.second = current.second + 1.0;
         coords.add(1, current.clone());
         int i = 2;
-        while (current.first < 1000) {
+        while (current.first < 100) {
             // Check if beam is inside fiber optic
-            if (next_region > num_regions - 1 || next_region < 1) {
+            if (next_region > num_regions - 2 || next_region < 1) {
+                current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin(current_angle));
+                new_x = Math.tan(current_angle);
+                current.first = current.first + new_x;
+
+                if (upwards) {
+                    current.second = current.second + 1;
+                } else {
+                    current.second = current.second - 1;
+                }
+                coords.add(i, current.clone());
                 break;
+
             }
 
             critical_angle = Math.asin(indices[next_region] / indices[current_region]);
@@ -178,7 +189,7 @@ public class Algorithm {
 
         for(int i = 0; i < angles.length; ++i) {
             System.out.print("angulo:"+angles[i]);
-            System.out.println(".   angulo refr:"+anglesRefr[i]);
+            System.out.println(".   angulo refr:" + anglesRefr[i]);
         }
 
 
