@@ -28,13 +28,6 @@ public class Main2 extends Application {
         Bounds b = r.localToScene(r.getBoundsInLocal());
         double start_x = b.getMinX();
 
-//        Line line = new Line();
-//        line.setStartX(b.getMinX());
-//        line.setStartY((b.getMinY() + b.getMaxY()) / 2);
-//        line.setEndX(start_x + coords.get(0).second * 10);
-//        line.setEndY(b.getMaxY());
-//        main_pane.getChildren().add(line);
-
         for (int i = 0; i < coords.size() - 1; i++) {
             Tuple<Double, Double> coord = coords.get(i);
             int r1 = coord.second.intValue();
