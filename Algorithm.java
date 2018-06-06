@@ -1,4 +1,4 @@
-package sample;
+package src;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -89,7 +89,7 @@ public class Algorithm {
         current.second = current.second + 1.0;
         coords.add(1, current.clone());
         int i = 2;
-        while (current.first < 100) {
+        while (current.first < 1000) {
             // Check if beam is inside fiber optic
             if (next_region > num_regions - 1 || next_region < 1) {
                 break;
@@ -127,6 +127,7 @@ public class Algorithm {
         return coords;
     }
 
+
     /**
      * @param space    Refraction indices list
      * @param y_coords y(i) coordinates list
@@ -152,28 +153,32 @@ public class Algorithm {
 
     static Double[] getangles(Double[] space, Double[] y_coords) {
         int n = space.length;
-        Double[] angles= new Double[n];
+        Double[] angles = new Double[n];
         Double[] anglesRefr = new Double[n];
         anglesRefr[0] = 0.0;
         double angulo;
         double angulorefr = 45;
         double angulorefrrad;
         double anguloRadianes;
-        double valor;
         double yp;
         double y;
-        for(int i = 0; i<n;++i) {
+        for (int i = 0; i < n; ++i) {
             yp = y_coords[i + 1];
-            y= y_coords[i];
-            double aux = Math.abs(yp-y);
+            y = y_coords[i];
+            double aux = Math.abs(yp - y);
             anguloRadianes = Math.atan(aux);
             angulo = Math.toDegrees(anguloRadianes);
-            angles[i] = angulo ;
-            if(i < n-1) {
-                angulorefrrad = Math.asin(space[i]*Math.sin(anguloRadianes)/space[i+1]);
+            angles[i] = angulo;
+            if (i < n - 1) {
+                angulorefrrad = Math.asin(space[i] * Math.sin(anguloRadianes) / space[i + 1]);
                 angulorefr = Math.toDegrees(angulorefrrad);
-                anglesRefr[i+1] = angulorefr;
+                anglesRefr[i + 1] = angulorefr;
             }
+        }
+
+        for(int i = 0; i < angles.length; ++i) {
+            System.out.print("angulo:"+angles[i]);
+            System.out.println(".   angulo refr:"+anglesRefr[i]);
         }
 
 
