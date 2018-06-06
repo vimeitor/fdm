@@ -91,8 +91,7 @@ public class Algorithm {
         int i = 2;
         while (current.first < length) {
             // Check if beam is inside fiber optic
-            if (next_region > num_regions - 2 || next_region < 1) {
-                current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin(current_angle));
+            if (next_region > num_regions-1 || next_region < 0) {
                 new_x = Math.tan(current_angle);
                 current.first = current.first + new_x;
 
@@ -118,6 +117,8 @@ public class Algorithm {
                     current.second = current.second - 1;
                 }
             } else {
+
+
                 reflects = false;
                 current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin(current_angle));
                 if (upwards) {
