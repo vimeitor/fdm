@@ -17,25 +17,36 @@ import java.util.ArrayList;
 public class Main2 extends Application {
     private Pane main_pane;
     private VBox rectangles_pane;
-    private int width = 1000, height = 20, coordinate_index = 0;
+    private int width = 1000, height = 20;
 
     public static void main(String[] args) {
         launch(args);
     }
 
-    private void drawLines(int result_index, Double[] all_coordinates) {
-//        Double[] current_coordinates = all_coordinates[result_index];
-        Double[] current_coordinates = new Double[10]; // FIXME: placeholder
-        for (int i = 0; i < current_coordinates.length - 1; i++) {
-            Node r = rectangles_pane.getChildren().get(i);
-            Bounds b = r.localToScene(r.getBoundsInLocal());
+    private void drawLines(ArrayList<Tuple<Double, Double>> coords) {
+        Node r = rectangles_pane.getChildren().get(rectangles_pane.getChildren().size() / 2);
+        Bounds b = r.localToScene(r.getBoundsInLocal());
 
-            Line line = new Line();
-            line.setStartX(b.getMinX());
-            line.setStartY(b.getMinY() + height * current_coordinates[i]);
-            line.setEndX(b.getMaxX());
-            line.setEndY(b.getMinY() + height * current_coordinates[i + 1]);
-            main_pane.getChildren().add(line);
+        Line line = new Line();
+        line.setStartX(b.getMinY() - 20);
+        line.setStartY((b.getMinX() + b.getMaxX()) / 2);
+        line.setEndX(coords.get(0).second);
+        line.setEndY(b.getMaxX());
+        main_pane.getChildren().add(line);
+
+        for (Tuple<Double, Double> coord : coords) {
+//            int rectangle = coord.second;
+//            double x = coord.first;
+//
+//            Node r = rectangles_pane.getChildren().get(i);
+//            Bounds b = r.localToScene(r.getBoundsInLocal());
+//
+//            Line line = new Line();
+//            line.setStartX(b.getMinX());
+//            line.setStartY(b.getMinY() + height * current_coordinates[i]);
+//            line.setEndX(b.getMaxX());
+//            line.setEndY(b.getMinY() + height * current_coordinates[i + 1]);
+//            main_pane.getChildren().add(line);
         }
     }
 
@@ -51,12 +62,6 @@ public class Main2 extends Application {
                 rectangle.setFill(Color.BURLYWOOD);
             rectangles_pane.getChildren().add(rectangle);
         }
-        ArrayList<Tuple<Double, Double>> a = Algorithm.snell(7,82,1.47,0.01,1);
-
-        for(int i = 0; i < a.size();++i) {
-            System.out.print("x: "+a.get(i).first);
-            System.out.println(". y: "+a.get(i).second);
-        }
 
         // We force JavaFX to prerender the rectangles so that we know the exact position they
         // will occupy; otherwise, the first time we run drawLines() it will superpose all
@@ -67,9 +72,8 @@ public class Main2 extends Application {
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-//        Double[] res = Algorithm.snell(20, 37.5, 1.0, 1.5, 2, 1);
-
-//        drawLines(coordinate_index, res);
+        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 37.5, 1.0, 0.01, 2);
+        drawLines(coords);
 
         Scene scene = new Scene(main_pane, 300, 250);
         primaryStage.setTitle("Fiber optic simulation");
@@ -78,6 +82,6 @@ public class Main2 extends Application {
 
         // The initial render is incorrect. Let's rerender it again.
         main_pane.getChildren().subList(1, main_pane.getChildren().size()).clear();
-//        drawLines(coordinate_index, res);
+        drawLines(coords);
     }
 }

@@ -54,7 +54,7 @@ public class Algorithm {
 
     static ArrayList<Tuple<Double, Double>> snell(int num_regions, double initial_angle, double
             n1, double delta, double alpha) {
-        double radius = (num_regions-2.0)/2.0;
+        double radius = (num_regions - 2.0) / 2.0;
         double n2 = n1 - delta * n1;
 
         Double[] indices = new Double[num_regions];
@@ -64,15 +64,17 @@ public class Algorithm {
         int core_index = (num_regions - 1) / 2;
         indices[core_index] = n1;
         for (int i = 1; i < core_index; i++) {
-            indices[core_index + i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow( (double)i / radius, alpha));
-            indices[core_index - i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double)i / radius, alpha));
+            indices[core_index + i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
+                    radius, alpha));
+            indices[core_index - i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
+                    radius, alpha));
         }
 
         ArrayList<Tuple<Double, Double>> coords = new ArrayList<>();
         Tuple<Double, Double> current = new Tuple<>();
         current.first = 0.0;
         current.second = (double) num_regions / 2.0;
-        coords.add(0,current.clone());
+        coords.add(0, current.clone());
         double angle = initial_angle;
         boolean reflects = true;
         boolean upwards = true;
@@ -151,7 +153,7 @@ public class Algorithm {
 
     static Double[] getangles(Double[] space, Double[] y_coords) {
         int n = space.length;
-        Double[] angles= new Double[n];
+        Double[] angles = new Double[n];
         Double[] anglesRefr = new Double[n];
         anglesRefr[0] = 0.0;
         double angulo;
@@ -161,17 +163,17 @@ public class Algorithm {
         double valor;
         double yp;
         double y;
-        for(int i = 0; i<n;++i) {
+        for (int i = 0; i < n; ++i) {
             yp = y_coords[i + 1];
-            y= y_coords[i];
-            double aux = Math.abs(yp-y);
+            y = y_coords[i];
+            double aux = Math.abs(yp - y);
             anguloRadianes = Math.atan(aux);
             angulo = Math.toDegrees(anguloRadianes);
-            angles[i] = angulo ;
-            if(i < n-1) {
-                angulorefrrad = Math.asin(space[i]*Math.sin(anguloRadianes)/space[i+1]);
+            angles[i] = angulo;
+            if (i < n - 1) {
+                angulorefrrad = Math.asin(space[i] * Math.sin(anguloRadianes) / space[i + 1]);
                 angulorefr = Math.toDegrees(angulorefrrad);
-                anglesRefr[i+1] = angulorefr;
+                anglesRefr[i + 1] = angulorefr;
             }
         }
 

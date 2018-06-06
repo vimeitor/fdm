@@ -19,7 +19,8 @@ import java.util.ArrayList;
 public class Main extends Application {
     private Pane main_pane;
     private HBox rectangles_pane;
-    private int width = 100, height = 400, coordinate_index = 0;
+    private int width = 100;
+    private int height = 400;
 
     public static void main(String[] args) {
         launch(args);
@@ -82,6 +83,7 @@ public class Main extends Application {
         });
         main_pane.getChildren().add(slider);
 
+        int coordinate_index = 0;
         drawLines(coordinate_index, res);
 
         Scene scene = new Scene(main_pane, 300, 250);
