@@ -26,7 +26,7 @@ public class Main2 extends Application {
         launch(args);
     }
 
-    private void drawLines(ArrayList<Tuple<Double, Double>> coords) {
+    private void drawLines(ArrayList<Tuple<Double, Double>> coords, boolean scaled) {
         Node r = rectangles_pane.getChildren().get(rectangles_pane.getChildren().size() / 2);
         Bounds b = r.localToScene(r.getBoundsInLocal());
         double start_x = b.getMinX();
@@ -77,11 +77,11 @@ public class Main2 extends Application {
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 85, 1.47, 0.01, 2);
+        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 85, 1.47, 0.01, 2, 1000);
         for (Tuple<Double, Double> t : coords) {
             System.out.println(t.second.intValue() + " -> " + t.first);
         }
-        drawLines(coords);
+        drawLines(coords, true);
 
         /*
          * Buttons
@@ -108,9 +108,10 @@ public class Main2 extends Application {
 
         Button render_button = new Button("Render");
         render_button.setOnAction((event) -> {
+            int length = cb.isSelected() ? 1000 : 100;
             ArrayList<Tuple<Double, Double>> coords2 = Algorithm.snell(20, Double.parseDouble
                     (angle.getText()), Double.parseDouble(n1.getText()), Double.parseDouble(delta
-                    .getText()), Integer.parseInt(alpha.getText()));
+                    .getText()), Integer.parseInt(alpha.getText()), length);
             main_pane.getChildren().subList(1, main_pane.getChildren().size()).clear();
             drawLines(coords2, cb.isSelected());
         });
@@ -127,6 +128,6 @@ public class Main2 extends Application {
 
         // The initial render is incorrect. Let's rerender it again.
         main_pane.getChildren().subList(1, main_pane.getChildren().size()).clear();
-        drawLines(coords);
+        drawLines(coords, true);
     }
 }

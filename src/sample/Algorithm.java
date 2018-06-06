@@ -1,4 +1,4 @@
-package src;
+package sample;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -53,7 +53,7 @@ public class Algorithm {
     }
 
     static ArrayList<Tuple<Double, Double>> snell(int num_regions, double initial_angle, double
-            n1, double delta, double alpha) {
+            n1, double delta, double alpha, int length) {
         double radius = (num_regions-2.0)/2.0;
         double n2 = n1 - delta * n1;
 
@@ -89,7 +89,7 @@ public class Algorithm {
         current.second = current.second + 1.0;
         coords.add(1, current.clone());
         int i = 2;
-        while (current.first < 100) {
+        while (current.first < length) {
             // Check if beam is inside fiber optic
             if (next_region > num_regions - 2 || next_region < 1) {
                 current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin(current_angle));
