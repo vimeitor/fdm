@@ -5,6 +5,8 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -42,9 +44,9 @@ public class Main2 extends Application {
             Bounds bp2 = rp2.localToScene(rp2.getBoundsInLocal());
 
             Line linep = new Line();
-            linep.setStartX(start_x + x1 * 10);
+            linep.setStartX(start_x + x1);
             linep.setStartY(bp.getMinY());
-            linep.setEndX(start_x + x2 * 10);
+            linep.setEndX(start_x + x2);
             linep.setEndY(bp2.getMinY());
             main_pane.getChildren().add(linep);
         }
@@ -72,11 +74,45 @@ public class Main2 extends Application {
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 86, 1.47, 0.01, 2);
+        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 85, 1.47, 0.01, 2);
         for (Tuple<Double, Double> t : coords) {
             System.out.println(t.second.intValue() + " -> " + t.first);
         }
         drawLines(coords);
+
+        /*
+         * Buttons
+         */
+        VBox tf = new VBox();
+        tf.setSpacing(12);
+        tf.setPadding(new Insets(20, 20, 20, 20));
+
+        TextField delta = new TextField();
+        delta.setText("0.01");
+        tf.getChildren().add(delta);
+        TextField alpha = new TextField();
+        alpha.setText("2");
+        tf.getChildren().add(alpha);
+        TextField angle = new TextField();
+        angle.setText("80");
+        tf.getChildren().add(angle);
+        TextField n1 = new TextField();
+        n1.setText("1.47");
+        tf.getChildren().add(n1);
+
+        Button render_button = new Button("Render");
+        render_button.setOnAction((event) -> {
+            ArrayList<Tuple<Double, Double>> coords2 = Algorithm.snell(20, Double.parseDouble
+                    (angle.getText()), Double.parseDouble(n1.getText()), Double.parseDouble(delta
+                    .getText()), Integer.parseInt(alpha.getText()));
+            main_pane.getChildren().subList(1, main_pane.getChildren().size()).clear();
+            drawLines(coords2);
+        });
+        tf.getChildren().add(render_button);
+        rectangles_pane.getChildren().add(tf);
+        /*
+         *
+         */
 
         Scene scene = new Scene(main_pane, 300, 250);
         primaryStage.setTitle("Fiber optic simulation");
