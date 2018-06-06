@@ -61,12 +61,14 @@ public class Algorithm {
         indices[0] = n2;
         indices[num_regions - 1] = n2;
 
-        int core_index = (num_regions - 1) / 2;
-        indices[core_index] = n1;
-        for (int i = 1; i < core_index; i++) {
-            indices[core_index + i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
+        int coreindex1 = num_regions / 2;
+        int coreindex2 = coreindex1 - 1;
+        indices[coreindex1] = n1;
+        indices[coreindex2] = n1;
+        for (int i = 1; i < coreindex1; i++) {
+            indices[coreindex1 + 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
                     radius, alpha));
-            indices[core_index - i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
+            indices[coreindex2 - 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
                     radius, alpha));
         }
 
@@ -78,15 +80,15 @@ public class Algorithm {
         double angle = initial_angle;
         boolean reflects = true;
         boolean upwards = true;
-        int current_region = core_index;
-        int next_region = core_index + 1;
+        int current_region = coreindex1;
+        int next_region = coreindex1 + 1;
         double current_angle = Math.toRadians(angle);
         double next_angle;
         double critical_angle;
         double new_x = 0.0;
-        new_x = 1.0 / Math.tan(current_angle);
+        new_x = Math.tan(current_angle);
         current.first = current.first + new_x;
-        current.second = current.second + 0.5;
+        current.second = current.second + 1.0;
         coords.add(1, current.clone());
         int i = 2;
         while (current.first < 100) {
@@ -120,7 +122,7 @@ public class Algorithm {
                     current.second = current.second - 1;
                 }
             }
-            new_x = 1.0 / Math.tan(current_angle);
+            new_x = Math.tan(current_angle);
             current.first = current.first + new_x;
             coords.add(i, current.clone());
             i++;
