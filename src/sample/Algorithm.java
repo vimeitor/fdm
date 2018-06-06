@@ -89,7 +89,7 @@ public class Algorithm {
         current.second = current.second + 1.0;
         coords.add(1, current.clone());
         int i = 2;
-        while (current.first < 100) {
+        while (current.first < 1000) {
             // Check if beam is inside fiber optic
             if (next_region > num_regions - 1 || next_region < 1) {
                 break;
