@@ -65,7 +65,7 @@ public class Algorithm {
         int coreindex2 = coreindex1 - 1;
         indices[coreindex1] = n1;
         indices[coreindex2] = n1;
-        for (int i = 1; i < coreindex1; i++) {
+        for (int i = 1; i < coreindex2; i++) {
             indices[coreindex1 + 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
                     radius, alpha));
             indices[coreindex2 - 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /

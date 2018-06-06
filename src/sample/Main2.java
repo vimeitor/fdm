@@ -79,7 +79,7 @@ public class Main2 extends Application {
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 82, 1.47, 0.01, 2);
+        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 86, 1.47, 0.01, 2);
         for (Tuple<Double, Double> t : coords) {
             System.out.println(t.second.intValue() + " -> " + t.first);
         }
