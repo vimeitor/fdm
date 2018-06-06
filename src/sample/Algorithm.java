@@ -1,4 +1,4 @@
-package sample;
+package src;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -54,34 +54,32 @@ public class Algorithm {
 
     static ArrayList<Tuple<Double, Double>> snell(int num_regions, double initial_angle, double
             n1, double delta, double alpha) {
-        double radius = (num_regions - 2.0) / 2.0;
+        double radius = (num_regions-2.0)/2.0;
         double n2 = n1 - delta * n1;
 
         Double[] indices = new Double[num_regions];
         indices[0] = n2;
         indices[num_regions - 1] = n2;
 
-        int coreindex1 = num_regions / 2;
-        int coreindex2 = coreindex1 - 1;
-        indices[coreindex1] = n1;
-        indices[coreindex2] = n1;
-        for (int i = 1; i < coreindex2; i++) {
-            indices[coreindex1 + 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
-                    radius, alpha));
-            indices[coreindex2 - 1] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double) i /
-                    radius, alpha));
+        int core_index1 = num_regions / 2;
+        int core_index2 = core_index1-1;
+        indices[core_index1] = n1;
+        indices[core_index2] = n1;
+        for (int i = 1; i < core_index2; i++) {
+            indices[core_index1 + i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow( (double)i / radius, alpha));
+            indices[core_index2 - i] = n1 * Math.sqrt(1 - 2 * delta * Math.pow((double)i / radius, alpha));
         }
 
         ArrayList<Tuple<Double, Double>> coords = new ArrayList<>();
         Tuple<Double, Double> current = new Tuple<>();
         current.first = 0.0;
-        current.second = (double) num_regions / 2.0;
-        coords.add(0, current.clone());
+        current.second = num_regions / 2.0;
+        coords.add(0,current.clone());
         double angle = initial_angle;
         boolean reflects = true;
         boolean upwards = true;
-        int current_region = coreindex1;
-        int next_region = coreindex1 + 1;
+        int current_region = core_index1;
+        int next_region = core_index1 + 1;
         double current_angle = Math.toRadians(angle);
         double next_angle;
         double critical_angle;
@@ -93,7 +91,7 @@ public class Algorithm {
         int i = 2;
         while (current.first < 100) {
             // Check if beam is inside fiber optic
-            if (next_region > num_regions - 1 || next_region < 0) {
+            if (next_region > num_regions - 1 || next_region < 1) {
                 break;
             }
 
@@ -110,8 +108,7 @@ public class Algorithm {
                 }
             } else {
                 reflects = false;
-                current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin
-                        (current_angle));
+                current_angle = Math.asin(indices[current_region] / indices[next_region] * Math.sin(current_angle));
                 if (upwards) {
                     current_region = current_region + 1;
                     next_region = next_region + 1;
@@ -129,6 +126,7 @@ public class Algorithm {
         }
         return coords;
     }
+
 
     /**
      * @param space    Refraction indices list
@@ -162,7 +160,6 @@ public class Algorithm {
         double angulorefr = 45;
         double angulorefrrad;
         double anguloRadianes;
-        double valor;
         double yp;
         double y;
         for (int i = 0; i < n; ++i) {
@@ -177,6 +174,11 @@ public class Algorithm {
                 angulorefr = Math.toDegrees(angulorefrrad);
                 anglesRefr[i + 1] = angulorefr;
             }
+        }
+
+        for(int i = 0; i < angles.length; ++i) {
+            System.out.print("angulo:"+angles[i]);
+            System.out.println(".   angulo refr:"+anglesRefr[i]);
         }
 
 
