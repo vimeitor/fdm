@@ -1,10 +1,13 @@
-package src;
+package sample;
 
 import javafx.application.Application;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -28,20 +31,15 @@ public class Main2 extends Application {
         Bounds b = r.localToScene(r.getBoundsInLocal());
         double start_x = b.getMinX();
 
-//        Line line = new Line();
-//        line.setStartX(b.getMinX());
-//        line.setStartY((b.getMinY() + b.getMaxY()) / 2);
-//        line.setEndX(start_x + coords.get(0).second * 10);
-//        line.setEndY(b.getMaxY());
-//        main_pane.getChildren().add(line);
+        int mult = scaled ? 1 : 10;
 
         for (int i = 0; i < coords.size() - 1; i++) {
             Tuple<Double, Double> coord = coords.get(i);
             int r1 = coord.second.intValue();
-            double x1 = coord.first *10;
+            double x1 = coord.first * mult;
             Tuple<Double, Double> coord2 = coords.get(i + 1);
             int r2 = coord2.second.intValue();
-            double x2 = coord2.first *10;
+            double x2 = coord2.first * mult;
 
             Node rp = rectangles_pane.getChildren().get(r1);
             Bounds bp = rp.localToScene(rp.getBoundsInLocal());
@@ -79,11 +77,48 @@ public class Main2 extends Application {
         main_pane = new Pane();
         main_pane.getChildren().add(rectangles_pane);
 
-        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20,75, 1.47, 0.01, 2);
+        ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 85, 1.47, 0.01, 2);
         for (Tuple<Double, Double> t : coords) {
             System.out.println(t.second.intValue() + " -> " + t.first);
         }
         drawLines(coords);
+
+        /*
+         * Buttons
+         */
+        VBox tf = new VBox();
+        tf.setSpacing(12);
+        tf.setPadding(new Insets(20, 20, 20, 20));
+
+        TextField delta = new TextField();
+        delta.setText("0.01");
+        tf.getChildren().add(delta);
+        TextField alpha = new TextField();
+        alpha.setText("2");
+        tf.getChildren().add(alpha);
+        TextField angle = new TextField();
+        angle.setText("85");
+        tf.getChildren().add(angle);
+        TextField n1 = new TextField();
+        n1.setText("1.47");
+        tf.getChildren().add(n1);
+        CheckBox cb = new CheckBox("scaled");
+        cb.setSelected(true);
+        tf.getChildren().add(cb);
+
+        Button render_button = new Button("Render");
+        render_button.setOnAction((event) -> {
+            ArrayList<Tuple<Double, Double>> coords2 = Algorithm.snell(20, Double.parseDouble
+                    (angle.getText()), Double.parseDouble(n1.getText()), Double.parseDouble(delta
+                    .getText()), Integer.parseInt(alpha.getText()));
+            main_pane.getChildren().subList(1, main_pane.getChildren().size()).clear();
+            drawLines(coords2, cb.isSelected());
+        });
+        tf.getChildren().add(render_button);
+        rectangles_pane.getChildren().add(tf);
+        /*
+         *
+         */
 
         Scene scene = new Scene(main_pane, 300, 250);
         primaryStage.setTitle("Fiber optic simulation");
