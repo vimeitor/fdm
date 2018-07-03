@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="fdm:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/fdm_jar</output-path>
+    <root id="archive" name="fdm.jar">
+      <element id="module-output" name="fdm" />
+    </root>
+  </artifact>
+</component>

@@ -78,9 +78,6 @@ public class Main2 extends Application {
         main_pane.getChildren().add(rectangles_pane);
 
         ArrayList<Tuple<Double, Double>> coords = Algorithm.snell(20, 85, 1.47, 0.01, 2, 1000);
-        for (Tuple<Double, Double> t : coords) {
-            System.out.println(t.second.intValue() + " -> " + t.first);
-        }
         drawLines(coords, true);
 
         /*
